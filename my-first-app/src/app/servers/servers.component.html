@@ -1,0 +1,37 @@
+<label for="server-name">Server Name</label>
+<!-- <input type="text" id="server-name" class="form-control" (input)="onUpdateServerName($event)"> -->
+<input type="text" id="server-name" class="form-control" [(ngModel)]="serverName">
+<!-- <p>{{ serverName }}</p> -->
+
+<button class="btn btn-primary" [disabled]="!allowNewServer" (click)="onCreateServer()">Toggle server</button>
+<!-- <p [innerText]="allowNewServer"></p> -->
+<!-- <p>{{ serverCreationStatus }}</p> -->
+<p *ngIf="serverCreated; else noServerCreated">Server was created, server name is {{ serverName }}</p>
+<ng-template #noServerCreated>
+    <p>No Server was created</p>
+</ng-template>
+
+<!-- <app-server></app-server>
+<app-server></app-server> -->
+
+<app-server *ngFor="let server of servers;"></app-server>
+
+<hr>
+
+<h2>Assignment 1</h2>
+
+<label for="username">Username</label>
+<input type="text" class="form-control" id="username" [(ngModel)]="username">
+<p *ngIf="username">Username: {{ username }}</p>
+<button class="btn btn-secondary" type="button" [disabled]="isUserEmpty" (click)="resetUser()">Reset</button>
+
+<hr>
+
+<h2>Assignment 2</h2>
+
+<button type="button" class="btn btn-info" (click)="toggleDetails()">Display Details</button>
+<p *ngIf="showDetails" style="display: inline; margin-left: 1em;">Secret Password = tuna</p>
+<h3 *ngIf="showDetailsLogs.length">Button clicks Log</h3>
+<ng-container *ngFor="let log of showDetailsLogs; let i = index">
+    <p [ngStyle]="{backgroundColor: checkNums(i+1, 5) ? 'blue' : ''}" [ngClass]="{'white-text': checkNums(i+1, 5)}">#{{ i+1 }} Click {{ log }}</p>
+</ng-container>

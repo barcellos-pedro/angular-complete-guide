@@ -1,0 +1,7 @@
+p {
+    color: green;
+    padding: 20px;
+    background-color: palegreen;
+    border: 1px solid green;
+    border-radius: .5em;
+}
