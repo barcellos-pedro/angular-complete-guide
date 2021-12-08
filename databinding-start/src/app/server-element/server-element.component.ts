@@ -8,13 +8,13 @@ import { AfterContentInit, AfterViewInit, Component, ContentChild, ElementRef, I
 export class ServerElementComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   @Input('server') element: { type: string, name: string, content: string };
-  @ViewChild('heading', { static: true }) header: ElementRef;
-  @ContentChild('paragraphContent', { static: true }) paragraphContent: ElementRef;
+  @ViewChild('heading', { static: true }) header: ElementRef; // to access this component references
+  @ContentChild('paragraphContent', { static: true }) paragraphContent: ElementRef; // to access references that comes from the parent and it will be displayed inside ng-content
 
   constructor() { }
 
   ngOnInit(): void {
-    console.log(`Text Content o header [OnInit]: ${this.header.nativeElement.textContent}`)
+    console.log(`Text Content of header [OnInit]: ${this.header.nativeElement.textContent}`)
     console.log(`Text Content of paragraphContent [OnInit]: ${this.paragraphContent.nativeElement.textContent}`)
   }
   

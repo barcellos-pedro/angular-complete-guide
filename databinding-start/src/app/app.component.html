@@ -12,4 +12,11 @@
       </app-server-element>
     </div>
   </div>
+  <hr>
+  <div class="row">
+    <h2>Assignment 4</h2>
+    <app-game-control (onIncrement)="increment($event)"></app-game-control>
+    <app-even *ngFor="let number of oddNumbers" [value]="number"></app-even>
+    <app-odd *ngFor="let number of evenNumbers" [value]="number"></app-odd>
+  </div>
 </div>

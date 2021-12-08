@@ -8,6 +8,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class AppComponent {
   serverElements = [{ type: 'server', name: 'TestServer', content: 'Just a test' }];
+  evenNumbers: number[] = [];
+  oddNumbers: number[] = [];
 
   onServerAdded(serverData: { serverName: string, serverContent: string }) {
     this.serverElements.push({
@@ -24,5 +26,17 @@ export class AppComponent {
       content: blueprintData.serverContent
     })
   }
-  
+
+  increment(value: number) {
+    if (this.isEven(value)) {
+      this.evenNumbers.push(value);
+    } else {
+      this.oddNumbers.push(value);
+    }
+  }
+
+  isEven(value: number): boolean {
+    return value % 2 == 0;
+  }
+
 }
