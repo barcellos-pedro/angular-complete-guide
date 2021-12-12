@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button class="btn btn-primary" (click)="onlyOdd = !onlyOdd">Only show {{ onlyOdd ? 'even' : 'odd' }}
+        numbers</button>
+      <br><br>
+      <ul class="list-group">
+        <div *ngIf="onlyOdd">
+          <h2>Only odd</h2>
+          <li *ngFor="let odd of oddNumbers" class="list-group-item" [ngClass]="{odd: odd % 2 !== 0}"
+            [ngStyle]="{backgroundColor: odd % 2 !== 0 ? 'yellow' : 'transparent'}">
+            {{ odd }}
+          </li>
+        </div>
+        
+        <div *appUnless="onlyOdd">
+          <h2>Only even</h2>
+          <li *ngFor="let even of evenNumbers" class="list-group-item" [ngClass]="{odd: even % 2 !== 0}"
+            [ngStyle]="{backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent'}">
+            {{ even }}
+          </li>
+        </div>
+
+        <!-- <div *ngIf="!onlyOdd">
+          <h2>Only even</h2>
+          <li *ngFor="let even of evenNumbers" class="list-group-item" [ngClass]="{odd: even % 2 !== 0}"
+            [ngStyle]="{backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent'}">
+            {{ even }}
+          </li>
+        </div> -->
+
+        <!-- Behind the scenes of *ngIf -->
+        <!-- <ng-template [ngIf]="!onlyOdd">
+          <div>
+            <h2>Only even</h2>
+            <li *ngFor="let even of evenNumbers"
+              class="list-group-item"
+              [ngClass]="{odd: even % 2 !== 0}"
+              [ngStyle]="{backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent'}">
+              {{ even }}
+            </li>
+          </div>
+        </ng-template> -->
+
+      </ul>
+      <p appBasicHighlight>Style me with basic directive!</p>
+      <p appBetterHighlight>Style me with better directive! [passing no props]</p>
+      <p appBetterHighlight [defaultColor]="'yellow'" highlightColor="red">Style me with better directive! [with inputs]
+      </p>
+      <!-- <p [appBetterHighlight]="'2px dashed red'">Style me with better directive! [passing directive prop]</p> -->
+
+      <!-- ngSwitch instead of multiple ngIf's-->
+      <div [ngSwitch]="value">
+        <p *ngSwitchCase="5">Value is 5</p>
+        <p *ngSwitchCase="10">Value is 10</p>
+        <p *ngSwitchCase="100">Value is 100</p>
+        <p *ngSwitchDefault>Value is Default</p>
+      </div>
+    </div>
+  </div>
+</div>
