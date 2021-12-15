@@ -1,0 +1,9 @@
+<h3 *ngIf="users.length; else noInactiveUsers">Inactive Users</h3>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let user of users; let i = index">
+    {{ user }} | <a href="#" (click)="onSetToActive(i)">Set to Active</a>
+  </li>
+</ul>
+<ng-template #noInactiveUsers>
+  <h3>There's no inactive users.</h3>
+</ng-template>
