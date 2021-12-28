@@ -22,4 +22,8 @@ export class ServersComponent implements OnInit {
     // this.router.navigate(['/servers'], { relativeTo: this.route });
   }
 
+  allowServerEdit(serverId: number): string {
+    return serverId === 3 ? '1' : '0';
+  }
+
 }

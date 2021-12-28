@@ -1,5 +1,8 @@
+import { Server } from "./server/server.model";
+
 export class ServersService {
-  private servers = [
+  
+  private servers: Server[] = [
     {
       id: 1,
       name: 'production-server',
@@ -17,11 +20,11 @@ export class ServersService {
     }
   ];
 
-  getServers() {
+  getServers(): Server[] {
     return this.servers;
   }
 
-  getServer(id: number) {
+  getServer(id: number): Server {
     return this.servers.find((server) => server.id === id);
   }
 
