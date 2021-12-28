@@ -36,6 +36,10 @@ export class RecipeService {
         return this.recipes.slice();
     }
 
+    getRecipe(id: number): Recipe | undefined {
+        return this.getRecipes()[id];
+    }
+
     addIngredientsToShoppingList(ingredients: Ingredient[]): void {
         this.shoppingListService.addIngredients(ingredients);
     }
