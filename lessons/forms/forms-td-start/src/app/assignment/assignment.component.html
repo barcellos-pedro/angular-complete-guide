@@ -1,0 +1,43 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="mail">E-mail</label>
+                <input type="email" id="mail" class="form-control" name="email" #email="ngModel" ngModel required email>
+                <p *ngIf="hasError(email)" class="error">Please enter a valid e-mail adress.</p>
+            </div>
+            <div class="form-group">
+                <label for="subscription">Subscription</label>
+                <select id="subscription" class="form-control" name="subscription" #subscription="ngModel"
+                    [ngModel]="'advanced'" required>
+                    <option value="basic">Basic</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="pro">Pro</option>
+                </select>
+                <p *ngIf="hasError(subscription)" class="error">Please select a subscription plan.</p>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" id="password" name="password" #password="ngModel" ngModel
+                    required>
+                <p *ngIf="hasError(password)" class="error">Please enter your password.</p>
+            </div>
+            <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+            <button class="btn btn-secondary" type="button" (click)="resetForm()"
+                style="margin-left: 1em;">Reset</button>
+            <p *ngIf="!form.valid && form.touched" class="help-block">Please, fill the form to submit.</p>
+        </div>
+        <div class="col-md-6">
+            <div *ngIf="submitted then dataReview"></div>
+        </div>
+    </div>
+</form>
+
+<ng-template #dataReview>
+    <div class="col-xs-12">
+        <h2>Your Data</h2>
+        <p><strong>E-mail:</strong> {{ data.email }}</p>
+        <p><strong>Subscription:</strong> {{ data.subscription }}</p>
+        <p><strong>Password:</strong> {{ data.password }}</p>
+    </div>
+</ng-template>
