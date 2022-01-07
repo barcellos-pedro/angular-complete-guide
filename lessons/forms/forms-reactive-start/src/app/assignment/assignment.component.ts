@@ -38,7 +38,7 @@ export class AssignmentComponent implements OnInit {
         if (control.value == 'test' || control.value == 'Test') {
           resolve({ 'nameIsForbidden': true });
         }
-    
+
         resolve(null);
       }, 1500);
     });
@@ -46,12 +46,12 @@ export class AssignmentComponent implements OnInit {
     return promise;
   }
 
-  hasError(control: string, validator?: string): boolean | AbstractControl{
-    if (validator) {
-      return this.form.get(control)[validator];
-    }
+  hasProp(control: string, prop: string): boolean {
+    return this.form.get(control)[prop];
+  }
 
-    return this.form.get(control);
+  hasError(control: string, error: string): boolean {
+    return this.form.get(control).errors[error];
   }
 
   onSubmit(): void {
