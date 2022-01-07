@@ -1,0 +1,33 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <fieldset>
+        <legend>Assignment</legend>
+        <div formGroupName="project">
+            <h4>Project</h4>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" formControlName="name">
+                <span *ngIf="!hasError('project.name', 'valid') && hasError('project.name', 'touched')" class="help-block">
+                    <span *ngIf="hasError('project.name').errors['required']">Name should not be empty.</span>
+                    <span *ngIf="hasError('project.name').errors['nameIsForbidden']">'Test' is not valid.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select class="form-control" name="status" id="status" formControlName="status">
+                    <option *ngFor="let status of statusList; let i = index" class="form-control" [value]="status">{{ status }}</option>
+                </select>
+            </div>
+        </div>
+        <h4>Contact</h4>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" class="form-control" formControlName="email" placeholder="youremail@mail.com">
+            <span *ngIf="!hasError('email', 'valid') && hasError('email', 'touched')" class="help-block">
+                <span *ngIf="hasError('email').errors['email']">Enter an valid e-mail - E.g: youremail@mail.com</span>
+                <span *ngIf="hasError('email').errors['required']">Enter an e-mail adress.</span>
+            </span>
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+        <button class="btn btn-secondary" type="button" (click)="onReset()" style="margin-left: 1em;">Reset</button>
+    </fieldset>
+</form>
