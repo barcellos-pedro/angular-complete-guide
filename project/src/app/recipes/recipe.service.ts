@@ -11,20 +11,20 @@ export class RecipeService {
     recipesChanged = new Subject<Recipe[]>();
 
     private recipes: Recipe[] = [
-        new Recipe('A Test Recipe',
-            'This is simply a test',
-            'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_1280.jpg',
-            [
-                new Ingredient('Meat', 1),
-                new Ingredient('French Fires', 24)
-            ]),
-        new Recipe('A Test Recipe 2',
-            'This is simply a second test',
-            'https://i2.wp.com/mercadoeconsumo.com.br/wp-content/uploads/2019/04/Que-comida-saud%C3%A1vel-que-nada-brasileiro-gosta-de-fast-food-1024x683.jpg',
-            [
-                new Ingredient('Buns', 2),
-                new Ingredient('Meat', 1)
-            ])
+        // new Recipe('A Test Recipe',
+        //     'This is simply a test',
+        //     'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_1280.jpg',
+        //     [
+        //         new Ingredient('Meat', 1),
+        //         new Ingredient('French Fires', 24)
+        //     ]),
+        // new Recipe('A Test Recipe 2',
+        //     'This is simply a second test',
+        //     'https://i2.wp.com/mercadoeconsumo.com.br/wp-content/uploads/2019/04/Que-comida-saud%C3%A1vel-que-nada-brasileiro-gosta-de-fast-food-1024x683.jpg',
+        //     [
+        //         new Ingredient('Buns', 2),
+        //         new Ingredient('Meat', 1)
+        //     ])
     ];
 
     constructor(private shoppingListService: ShoppingListService) {}
@@ -47,6 +47,11 @@ export class RecipeService {
 
     addRecipe(recipe: Recipe) {
         this.recipes.push(recipe);
+        this.changeRecipes();
+    }
+
+    setRecipes(recipes: Recipe[]) {
+        this.recipes = recipes;
         this.changeRecipes();
     }
 
