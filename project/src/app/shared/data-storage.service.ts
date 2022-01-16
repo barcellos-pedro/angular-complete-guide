@@ -11,7 +11,10 @@ import { RecipeService } from "../recipes/recipe.service";
 export class DataStorageService {
     private readonly URL: string = "https://ng-course-recipe-book-e4d1a-default-rtdb.firebaseio.com/recipes.json";
 
-    constructor(private http: HttpClient, private recipesService: RecipeService) { }
+    constructor(
+        private http: HttpClient,
+        private recipesService: RecipeService
+    ) { }
 
     storeRecipes() {
         const recipes = this.recipesService.getRecipes();
