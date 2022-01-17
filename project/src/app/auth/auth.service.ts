@@ -21,6 +21,7 @@ export interface SignInResponse extends SignUpResponse {
     providedIn: 'root'
 })
 export class AuthService {
+    // With BehaviourSubject we always get the latest value, even if we missed the previous update
     user: Subject<User> = new BehaviorSubject<User>(null);
     
     private readonly webApiKey: string = "AIzaSyDYSSR-lagSyrFR_9tMLcGhlyf2Q0QuxsQ";
