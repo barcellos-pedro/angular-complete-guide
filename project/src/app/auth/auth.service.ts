@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from "rxjs";
 
 import { User } from "./user.model";
+import { environment } from "../../environments/environment";
 
 export interface SignUpResponse {
     idToken: string; // A Firebase Auth ID token for the newly created user.
@@ -24,9 +25,8 @@ export class AuthService {
     // With BehaviourSubject we always get the latest value, even if we missed the previous update
     user: Subject<User> = new BehaviorSubject<User>(null);
     
-    private readonly webApiKey: string = "AIzaSyDYSSR-lagSyrFR_9tMLcGhlyf2Q0QuxsQ";
-    private readonly SIGN_UP_URL: string = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.webApiKey}`;
-    private readonly SIGN_IN_URL: string = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.webApiKey}`;
+    private readonly SIGN_UP_URL: string = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.API_KEY}`;
+    private readonly SIGN_IN_URL: string = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.API_KEY}`;
     private tokenExpirationTimeout: any = null;
 
     constructor(

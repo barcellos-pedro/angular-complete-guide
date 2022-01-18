@@ -55,7 +55,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
         authObservable.subscribe({
             next: (response) => {
-                console.log(response);
                 this.isLoading = false;
                 this.router.navigate(['/recipes']);
             },
