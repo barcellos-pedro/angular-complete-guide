@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/ingredient.model';
+import { AppState } from 'src/app/store/app.reducer';
 
 import { ADD_INGREDIENT, DELETE_INGREDIENT, STOP_EDITING, UPDATE_INGREDIENT } from '../store/shopping-list.actions';
 import { ShoppingListState } from '../store/shopping-list.reducer';
@@ -20,7 +21,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   @ViewChild('form', { static: false }) shoppingListForm: NgForm;
 
   constructor(
-    private store: Store<{ shoppingList: ShoppingListState }>
+    private store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
