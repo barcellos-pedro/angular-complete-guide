@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { Ingredient } from '../../shared/ingredient.model';
 
 export const GET_INGREDIENTS = createAction(
-    '[ShoppingList Get Ingredients]'
+    '[ShoppingList Get all Ingredients]'
 );
 
 export const GET_INGREDIENT = createAction(
@@ -12,7 +12,7 @@ export const GET_INGREDIENT = createAction(
 );
 
 export const ADD_INGREDIENT = createAction(
-    '[ShoppingList Add Ingredient]',
+    '[ShoppingList Add an Ingredient]',
     props<{ newIngredient: Ingredient }>()
 );
 
@@ -22,11 +22,15 @@ export const ADD_INGREDIENTS = createAction(
 );
 
 export const UPDATE_INGREDIENT = createAction(
-    '[ShoppingList Add all Ingredients]',
-    props<{ index: number, newIngredient: Ingredient }>()
+    '[ShoppingList Update an Ingredient]',
+    props<{ newIngredient: Ingredient }>()
 )
 
-export const DELETE_INGREDIENT = createAction(
-    '[ShoppingList Delete one Ingredients]',
+export const DELETE_INGREDIENT = createAction('[ShoppingList Delete an Ingredient]');
+
+export const START_EDITING = createAction(
+    '[ShoppingList Start editing an Ingredient]',
     props<{ index: number }>()
 );
+
+export const STOP_EDITING = createAction('[ShoppingList Stop editing an Ingredient]');
