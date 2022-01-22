@@ -26,7 +26,6 @@ export class ShoppingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // NgRx
     this.ingredients$ = this.store.select('shoppingList');
   }
 }

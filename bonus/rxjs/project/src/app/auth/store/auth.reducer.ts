@@ -1,5 +1,7 @@
-import { Action, createReducer } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
+
 import { User } from '../user.model';
+import * as AuthActions from './auth.actions';
 
 export interface AuthState {
     user: User
@@ -9,11 +11,27 @@ const initialState: AuthState = {
     user: null
 };
 
+/**
+ * TODO: Create actions
+ */
 export const authReducer = createReducer(
     initialState,
-    /**
-     * TODO: Create actions
-     */
+    on(
+        AuthActions.LOGIN,
+        (state, { email, userId, idToken, expiresIn }) => {
+            const authenticatedUser = new User(email, userId, idToken, expiresIn);
+            return {
+                ...state,
+                user: authenticatedUser
+            }
+        }
+    ),
+    on(AuthActions.LOGOUT, (state) => {
+        return {
+            ...state,
+            user: null
+        }
+    })
 );
 
 // Wrapper only required for AOT
