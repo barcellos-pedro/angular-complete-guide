@@ -20,12 +20,14 @@ const initialState: ShoppingListState = {
 
 export const shoppingListReducer = createReducer(
     initialState,
-    on(ShoppingListActions.GET_INGREDIENTS, (state) => ({ ...state })),
     on(
         ShoppingListActions.ADD_INGREDIENT,
         (state, { newIngredient }) => ({ ...state, ingredients: [...state.ingredients, newIngredient] })
     ),
-
+    on(
+        ShoppingListActions.ADD_INGREDIENTS,
+        (state, { newIngredients }) => ({ ...state, ingredients: [...state.ingredients, ...newIngredients] })
+    ),
     on(
         ShoppingListActions.UPDATE_INGREDIENT,
         (state, { newIngredient }) => {

@@ -2,10 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, map, Observable, of, switchMap, tap } from "rxjs";
+import { Action } from "@ngrx/store";
 
 import * as AuthActions from "./auth.actions";
 import { environment } from "../../../environments/environment";
+import { User } from "../user.model";
+import { AuthLogoutService } from "../auth-logout.service";
 
 export interface SignUpResponse {
     idToken: string; // A Firebase Auth ID token for the newly created user.
@@ -21,47 +24,146 @@ export interface SignInResponse extends SignUpResponse {
 
 @Injectable()
 export class AuthEffects {
+    authSignUp = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.SIGNUP_START),
+            switchMap(data => {
+                return this.http.post<SignInResponse>(environment.SIGNUP_URL, {
+                    email: data.email,
+                    password: data.password,
+                    returnSecureToken: true
+                }).pipe(
+                    map(response => this.handleAuthentication(response.email, response.localId, response.idToken, +response.expiresIn)),
+                    catchError(error => this.handleError(error))
+                );
+            })
+        )
+    );
+
     authLogin = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.LOGIN_START),
             // Return a new observable and use the previous observable data
             switchMap(data => {
-                return this.http.post<SignInResponse>(environment.SIGN_IN_URL, {
+                return this.http.post<SignInResponse>(environment.SIGNIN_URL, {
                     email: data.email,
                     password: data.password,
                     returnSecureToken: true
                 }).pipe(
-                    map(response => {
-                        const currentTime = new Date().getTime();
-                        const expirationDate = new Date(currentTime + (+response.expiresIn * 1000));
-                        // We must return a new Observable<Action> in the createEffect
-                        // We dont need of() because map already returns an observable
-                        return AuthActions.LOGIN({
-                            email: response.email,
-                            userId: response.localId,
-                            idToken: response.idToken,
-                            expiresIn: expirationDate
-                        });
-                    }),
-                    // We must always return an non erroneous observable
-                    // So the switchMap does not die in case of any errors
-                    catchError(error => {
-                        return of(AuthActions.LOGIN_FAIL({ error: this.handleError(error) }));
-                    })
+                    map(response => this.handleAuthentication(response.email, response.localId, response.idToken, +response.expiresIn)),
+                    catchError(error => this.handleError(error))
                 )
             })
         )
     );
 
-    authSuccess = createEffect(() =>
+    authRedirect = createEffect(() =>
         this.actions$.pipe(
-            ofType(AuthActions.LOGIN),
+            ofType(AuthActions.AUTHENTICATE_SUCCESS),
             tap(() => this.router.navigate(['/'])),
         ),
         { dispatch: false }
     );
 
-    private handleError(data: any): string {
+    authLogout = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.LOGOUT),
+            tap(() => {
+                this.router.navigate(['/auth']);
+                localStorage.removeItem('userData');
+                this.authLogoutService.clearLogoutTimer();
+            })
+        ),
+        { dispatch: false }
+    );
+
+    autoLogin = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthActions.AUTO_LOGIN),
+            map(() => {
+                const userData: {
+                    email: string,
+                    id: string,
+                    _token: string,
+                    _tokenExpirationDate: string
+                } = JSON.parse(localStorage.getItem('userData'));
+
+                if (!userData) {
+                    return { type: '[Auth] Auto Login failed' };
+                }
+
+                const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+
+                if (loadedUser.token) {
+                    const tokenExpirationTime: number = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+                    this.setLogoutTimer(tokenExpirationTime);
+
+                    return AuthActions.AUTHENTICATE_SUCCESS({
+                        email: loadedUser.email,
+                        userId: loadedUser.id,
+                        idToken: loadedUser.token,
+                        expiresIn: new Date(userData._tokenExpirationDate)
+                    });
+                }
+
+                return { type: '[Auth] Auto Login failed' };
+            })
+        )
+    );
+
+    private setLogoutTimer(tokenExpirationDate: number): void {
+        const expirationTime = new Date(tokenExpirationDate).getTime() - new Date().getTime();
+        this.authLogoutService.setLogoutTimer(expirationTime * 1000);
+    }
+
+    /**
+     * Return a new Observable<Action> in the createEffect
+     * There is no need to use of() because map already returns an observable
+     * @param email string
+     * @param localId string
+     * @param idToken string
+     * @param expiresIn string
+     * @returns AUTHENTICATE_SUCCESS
+     */
+    private handleAuthentication(email: string, localId: string, idToken: string, expiresIn: number): Action {
+        const currentTime = new Date().getTime();
+        const expirationDate = new Date(currentTime + (expiresIn * 1000));
+        const user = new User(email, localId, idToken, expirationDate);
+
+        this.setLogoutTimer(expiresIn * 1000);
+
+        // Persist login data on localStorage
+        localStorage.setItem('userData', JSON.stringify(user));
+
+        // Persist login data on store
+        return AuthActions.AUTHENTICATE_SUCCESS({
+            email: email,
+            userId: localId,
+            idToken: idToken,
+            expiresIn: expirationDate
+        });
+    }
+
+    /**
+     * Return an non erroneous observable
+     * So the actions$ pipe does not die in case of any errors
+     * @param error object
+     * @returns Observable<Action>
+     */
+    private handleError(error: any): Observable<Action> {
+        return of(
+            AuthActions.AUTHENTICATE_FAIL({
+                error: this.getErrorMessage(error)
+            })
+        );
+    }
+
+    /**
+     * Get error message based on api response
+     * @param data string
+     * @returns errorMessage
+     */
+    private getErrorMessage(data: any): string {
         const errors: { [key: string]: string } = {
             // Sign Up Errors
             "EMAIL_EXISTS": "The email address is already in use by another account.",
@@ -81,6 +183,7 @@ export class AuthEffects {
     constructor(
         private actions$: Actions,
         private http: HttpClient,
-        private router: Router
+        private router: Router,
+        private authLogoutService: AuthLogoutService
     ) { }
 }

@@ -17,8 +17,22 @@ const initialState: AuthState = {
 
 export const authReducer = createReducer(
     initialState,
+    on(AuthActions.SIGNUP_START, (state) => {
+        return {
+            ...state,
+            authError: null,
+            loading: true
+        }
+    }),
+    on(AuthActions.LOGIN_START, (state) => {
+        return {
+            ...state,
+            authError: null,
+            loading: true
+        }
+    }),
     on(
-        AuthActions.LOGIN,
+        AuthActions.AUTHENTICATE_SUCCESS,
         (state, { email, userId, idToken, expiresIn }) => {
             const authenticatedUser = new User(email, userId, idToken, expiresIn);
             return {
@@ -29,25 +43,24 @@ export const authReducer = createReducer(
             }
         }
     ),
-    on(AuthActions.LOGOUT, (state) => {
-        return {
-            ...state,
-            user: null
-        }
-    }),
-    on(AuthActions.LOGIN_START, (state) => {
-        return {
-            ...state,
-            authError: null,
-            loading: true
-        }
-    }),
-    on(AuthActions.LOGIN_FAIL, (state, { error }) => {
+    on(AuthActions.AUTHENTICATE_FAIL, (state, { error }) => {
         return {
             ...state,
             user: null,
             authError: error,
             loading: false
+        }
+    }),
+    on(AuthActions.CLEAR_ERROR, (state) => {
+        return {
+            ...state,
+            authError: null
+        }
+    }),
+    on(AuthActions.LOGOUT, (state) => {
+        return {
+            ...state,
+            user: null
         }
     })
 );

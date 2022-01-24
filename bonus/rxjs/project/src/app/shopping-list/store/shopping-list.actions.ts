@@ -2,15 +2,6 @@ import { createAction, props } from '@ngrx/store';
 
 import { Ingredient } from '../../shared/ingredient.model';
 
-export const GET_INGREDIENTS = createAction(
-    '[ShoppingList] Get all Ingredients'
-);
-
-export const GET_INGREDIENT = createAction(
-    '[ShoppingList] Get one Ingredient',
-    props<{ index: number }>()
-);
-
 export const ADD_INGREDIENT = createAction(
     '[ShoppingList] Add Ingredient',
     props<{ newIngredient: Ingredient }>()
