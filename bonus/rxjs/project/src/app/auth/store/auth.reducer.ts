@@ -4,16 +4,17 @@ import { User } from '../user.model';
 import * as AuthActions from './auth.actions';
 
 export interface AuthState {
-    user: User
+    user: User;
+    authError: string;
+    loading: boolean;
 };
 
 const initialState: AuthState = {
-    user: null
+    user: null,
+    authError: null,
+    loading: false,
 };
 
-/**
- * TODO: Create actions
- */
 export const authReducer = createReducer(
     initialState,
     on(
@@ -22,7 +23,9 @@ export const authReducer = createReducer(
             const authenticatedUser = new User(email, userId, idToken, expiresIn);
             return {
                 ...state,
-                user: authenticatedUser
+                authError: null,
+                user: authenticatedUser,
+                loading: false
             }
         }
     ),
@@ -30,6 +33,21 @@ export const authReducer = createReducer(
         return {
             ...state,
             user: null
+        }
+    }),
+    on(AuthActions.LOGIN_START, (state) => {
+        return {
+            ...state,
+            authError: null,
+            loading: true
+        }
+    }),
+    on(AuthActions.LOGIN_FAIL, (state, { error }) => {
+        return {
+            ...state,
+            user: null,
+            authError: error,
+            loading: false
         }
     })
 );

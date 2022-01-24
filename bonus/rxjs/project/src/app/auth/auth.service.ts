@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from "rxjs";
+import { catchError, Observable, tap, throwError } from "rxjs";
 
 import { User } from "./user.model";
 import { environment } from "../../environments/environment";
@@ -28,8 +28,6 @@ export class AuthService {
     // With BehaviourSubject we always get the latest value, even if we missed the previous update
     // user: Subject<User> = new BehaviorSubject<User>(null);
     
-    private readonly SIGN_UP_URL: string = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.API_KEY}`;
-    private readonly SIGN_IN_URL: string = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.API_KEY}`;
     private tokenExpirationTimeout: any = null;
 
     constructor(
@@ -39,7 +37,7 @@ export class AuthService {
     ) { }
 
     signUp(email: string, password: string): Observable<SignUpResponse> {
-        return this.http.post<SignUpResponse>(this.SIGN_UP_URL, {
+        return this.http.post<SignUpResponse>(environment.SIGN_UP_URL, {
             email,
             password,
             returnSecureToken: true
@@ -50,7 +48,7 @@ export class AuthService {
     }
 
     signIn(email: string, password: string) {
-        return this.http.post<SignInResponse>(this.SIGN_IN_URL, {
+        return this.http.post<SignInResponse>(environment.SIGN_IN_URL, {
             email,
             password,
             returnSecureToken: true
