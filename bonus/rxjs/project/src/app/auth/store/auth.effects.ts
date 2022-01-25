@@ -111,9 +111,8 @@ export class AuthEffects {
         )
     );
 
-    private setLogoutTimer(tokenExpirationDate: number): void {
-        const expirationTime = new Date(tokenExpirationDate).getTime() - new Date().getTime();
-        this.authLogoutService.setLogoutTimer(expirationTime * 1000);
+    private setLogoutTimer(expiration: number): void {
+        this.authLogoutService.setLogoutTimer(expiration);
     }
 
     /**
