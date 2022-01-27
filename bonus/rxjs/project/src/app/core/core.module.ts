@@ -3,11 +3,9 @@ import { NgModule } from "@angular/core";
 
 import { AuthInterceptorService } from "../auth/auth-interceptor.service";
 import { AuthGuard } from "../auth/auth.guard";
-import { RecipeService } from "../recipes/recipe.service";
 
 @NgModule({
     providers: [
-        RecipeService,
         AuthGuard,
         {
             provide: HTTP_INTERCEPTORS, // Every request will be intercepted

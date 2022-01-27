@@ -1,6 +1,9 @@
 <div class="row">
     <div class="col-xs-12">
-        <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+        <div *ngIf="isLoading" style="text-align: center;">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
+        <form *ngIf="!isLoading" [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
             <div class="row">
                 <div class="col-xs-12">
                     <button [disabled]="!recipeForm.valid" class="btn btn-success" type="submit" style="margin-right: 1em;">Save</button>
@@ -46,10 +49,10 @@
                             <input type="number" class="form-control" formControlName="amount">
                         </div>
                         <div class="col-xs-2">
-                            <button class="btn btn-danger" type="button" (click)="onDelete(i)">X</button>
+                            <button class="btn btn-danger" type="button" (click)="onDeleteIngredient(i)">X</button>
                         </div>
                     </div>
-                    <button *ngIf="recipeForm.value.ingredients.length" class="btn btn-secondary" type="button" (click)="onClear()" style="margin-top: 1em;">Clear Ingredients</button>
+                    <button *ngIf="recipeForm.value.ingredients.length" class="btn btn-secondary" type="button" (click)="onClearIngredients()" style="margin-top: 1em;">Clear Ingredients</button>
                     <hr>
                     <div class="row">
                         <div class="col-xs-12">

@@ -12,7 +12,7 @@ export const SIGNUP_START = createAction(
 
 export const AUTHENTICATE_SUCCESS = createAction(
     '[Auth] Login',
-    props<{ email: string, userId: string, idToken: string, expiresIn: Date }>()
+    props<{ email: string, userId: string, idToken: string, expiresIn: Date, redirect: boolean }>()
 );
 
 export const AUTHENTICATE_FAIL = createAction(

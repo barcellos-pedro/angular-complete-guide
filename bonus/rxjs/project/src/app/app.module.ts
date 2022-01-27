@@ -12,9 +12,10 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
-import * as AppReducer from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { environment } from 'src/environments/environment';
+import { RecipeEffects } from './recipes/store/recipe.effects';
+import * as AppReducer from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { environment } from 'src/environments/environment';
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot(AppReducer.reducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     StoreRouterConnectingModule.forRoot(),
     AppRoutingModule,
