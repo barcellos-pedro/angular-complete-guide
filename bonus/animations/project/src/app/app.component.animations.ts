@@ -44,17 +44,14 @@ export const appComponentAnimations: any[] = [
         transition('highlighted => normal', animate(800)),
         transition(
             'shrunken <=> *', // * wild card to any state
-            [   // Animation during transition
-                // Starting phase, if no animate method is used
-                group([
-                    animate(500, style({ 
-                        backgroundColor: 'orange',
-                    })),
-                    animate(500, style({ // Second phase, if we animate with style
-                        borderRadius: '50px'
-                    })),
-                ]),
-                animate(1000) // End phase, if we animate without style
+            [ // Animation during transition
+                style({ // Starting phase, if no animate method is used
+                    backgroundColor: 'orange',
+                }),
+                animate(1000, style({ // Second phase, if we animate with style
+                    borderRadius: '50px'
+                })),
+                animate(500) // End phase, if we animate without style
                 // and so on...
             ]
         ),
