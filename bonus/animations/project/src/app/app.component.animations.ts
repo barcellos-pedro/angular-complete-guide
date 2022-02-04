@@ -65,7 +65,7 @@ export const appComponentAnimations: any[] = [
             })
         ),
         // void, reserved state name
-        // the element that it not in the dom yet
+        // the element is not in the dom yet
         transition('void => *', [
             style({ // initial style right at the beginning
                 opacity: 0,
